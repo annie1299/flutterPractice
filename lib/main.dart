@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutterPractice/constants.dart';
+import 'package:flutterPractice/sharedPreferences/sharedPrefExam.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'loginScrreen.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var loginInfo = prefs.getBool('loginInfo');
+  print(loginInfo);
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  runApp(
+    MaterialApp(
       title: 'MAD',
       theme: ThemeData(
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: LoginScreen(),
-    );
-  }
+      home: loginInfo == true ? SharedPrefExam() : LoginScreen(),
+    ),
+  );
 }

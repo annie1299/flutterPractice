@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterPractice/recipes/recipeBook.dart';
 import 'package:flutterPractice/recipeGridPrac/recipeBookGrid.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'APIcalls/apicall.dart';
 import 'home/HomeScreen.dart';
 import 'IntegerAndCalPractice/search.dart';
@@ -10,6 +11,7 @@ import 'resumePrac/resumeBuilderLab6.dart';
 import 'recipes/recipeBook.dart';
 import 'recipeGridPrac/recipeBookGrid.dart';
 import 'calculatorPrac/Calculator.dart';
+import 'sharedPreferences/sharedPrefExam.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -18,6 +20,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  bool _loginSharedPref = false;
 
   bool isRememberMe = true;
   bool _isObscure = true;
@@ -30,6 +34,22 @@ class _LoginScreenState extends State<LoginScreen> {
   changeText() {
     setState(() {
       myName = 'Hello 222301';
+    });
+  }
+
+  saveLoginSharedPref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setBool('loginInfo', _loginSharedPref);
+      print('Login Info: $_loginSharedPref');
+    });
+  }
+
+  removeLoginSharedPref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.remove('loginInfo');
+      print('Login Info: $_loginSharedPref');
     });
   }
 
@@ -150,11 +170,12 @@ class _LoginScreenState extends State<LoginScreen> {
         //onPressed: () => changeText(),
         onPressed: () {
           if (_formKey.currentState.validate()) {
+            _loginSharedPref = true;
+            saveLoginSharedPref();
             print("Validated");
             String textToSend = emailValueHolder.text;
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    search(username: textToSend)));
+                builder: (BuildContext context) => SharedPrefExam()));
           } else {
             print("Not Validated");
           }
@@ -163,6 +184,33 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Color(0xff185a37),
         child: Text(
           'LOGIN',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget logoutBtn() {
+    return Container(
+      width: double.infinity,
+      child: RaisedButton(
+        //onPressed: () => changeText(),
+        onPressed: () {
+          {
+            removeLoginSharedPref();
+            print("Validated");
+            String textToSend = emailValueHolder.text;
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => LoginScreen()));
+          }
+        },
+        padding: EdgeInsets.all(15),
+        color: Color(0xff185a37),
+        child: Text(
+          'LOGOUT',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -204,6 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 20),
               loginBtn(),
               SizedBox(height: 20),
+              logoutBtn(),
               //textChange(),
             ],
           ),
@@ -337,6 +386,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => ApiCalls()));
+              },
+            ),
+            ListTile(
+              title: Text("Shared Preferences"),
+              leading: Icon(Icons.next_plan),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => SharedPrefExam()));
               },
             ),
           ],
