@@ -3,9 +3,11 @@ import 'package:flutterPractice/constants.dart';
 import 'package:flutterPractice/sharedPreferences/sharedPrefExam.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'loginScrreen.dart';
+import './sharedPreferences/databaseService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  DatabaseService();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var loginInfo = prefs.getBool('loginInfo');
   print(loginInfo);

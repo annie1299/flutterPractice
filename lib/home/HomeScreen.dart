@@ -35,17 +35,14 @@ class _HomeState extends State<HomeScreen> {
           items: [
             BottomNavigationBarItem(
               icon: new Icon(Icons.home),
-              // ignore: deprecated_member_use
               title: new Text('Home'),
             ),
             BottomNavigationBarItem(
               icon: new Icon(Icons.mail),
-              // ignore: deprecated_member_use
               title: new Text('Messages'),
             ),
             BottomNavigationBarItem(
               icon: new Icon(Icons.person),
-              // ignore: deprecated_member_use
               title: new Text('Profile'),
             ),
           ],
